@@ -1,1 +1,38 @@
+{
+    "properties": {
+        "displayName": "Enforce minimum version of Kubernetes in AKS",
+        "policyType": "Custom",
+        "mode": "All",
+        "description": "This policy ensures AKS clusters have a minimum version of Kubernetes specified at the time of assignment",
+        "metadata": {
+            "category": "Kubernetes"
+        },
+        "parameters": {
+            "minimumVersion": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Minimum version",
+                    "description": "The minimum required version of Kubernetes"
+                }
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.ContainerService/ManagedClusters"
+                    },
+                    {
+                        "field": "Microsoft.ContainerService/ManagedClusters/kubernetesVersion",
+                        "lessThan": "[parameters('minimumVersion')]"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "audit"
+            }
+        }
+    }
+}
 
